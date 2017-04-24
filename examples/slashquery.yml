@@ -1,30 +1,30 @@
 ---
-slashquery:
-  routes:
-    ~: # api.slashquery.com/ -> http://httpbin.org/*
-      path: /*
-      uptream: httpbin
-      plugins:
-        - wfa
-    get: # api.slashquery.com/get/ -> http://httpbin.org/get/*
-      path: /get/*
-      upstream: httpbin
-    anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get/*
-      path: /get/*
-      uptream: httpbin
-    headers: # api.slashquery.com/headers/ -> http://httpbin.org/<servers>/*
-      path: /headers/*
-      servers:
-        - httpbin.org
-        - eu.httpbin.org
-    images: # api.slashquery.com/images/ -> http://<servers>/image/*
-      path: /image/*
-      servers:
-        - httpbin.org
-        - eu.httpbin.org, backup
+routes:
+  ~: # api.slashquery.com/ -> http://httpbin.org/*
+    path: /*
+    uptream: httpbin
+    plugins:
+      - wfa
+      - jwt
+  get: # api.slashquery.com/get/ -> http://httpbin.org/get/*
+    path: /get/*
+    upstream: httpbin
+  anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get/*
+    path: /get/*
+    uptream: httpbin
+  headers: # api.slashquery.com/headers/ -> http://httpbin.org/<servers>/*
+    path: /headers/*
+    servers:
+      - httpbin.org
+      - eu.httpbin.org
+  images: # api.slashquery.com/images/ -> http://<servers>/image/*
+    path: /image/*
+    servers:
+      - httpbin.org:8080
+      - eu.httpbin.org
 
-  upstreams:
-    httpbin:
-      servers:
-        - httpbin.org
-        - eu.httpbin.org
+upstreams:
+  httpbin:
+    servers:
+      - httpbin.org
+      - eu.httpbin.org
