@@ -1,0 +1,1 @@
+# SlashQuery plugins
