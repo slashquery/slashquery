@@ -1,2 +1,3 @@
-# slashquery
+# SlashQuery
+
 API Gateway
