@@ -1,6 +1,11 @@
+# slashquery configuration file
 ---
+config:
+  host: 0.0.0.0
+  port: 8000
+
 routes:
-  ~: # api.slashquery.com/ -> http://httpbin.org/*
+  /: # api.slashquery.com/ -> http://httpbin.org/*
     path: /*
     uptream: httpbin
     plugins:
