@@ -1,8 +1,8 @@
 # slashquery configuration file
 ---
 config:
-  host: 0.0.0.0
-  port: 8000
+  host: ~
+  port: 8080
 
 routes:
   /: # api.slashquery.com/ -> http://httpbin.org/*
