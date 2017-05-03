@@ -16,8 +16,3 @@ type Route struct {
 type Upstream struct {
 	Servers []string
 }
-
-type Servers struct {
-	host string
-	port int
-}
