@@ -34,8 +34,8 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	for _, v := range sq.Routes {
-		fmt.Printf("v = %s\n", v)
+	for r, v := range sq.Routes {
+		fmt.Printf("route = %+v\n", r)
 		fmt.Printf("path = %+v\n", v.Path)
 		fmt.Printf("upstream = %+v\n", v.Upstream)
 		fmt.Printf("plugins= %+v\n", v.Plugins)
