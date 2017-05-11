@@ -3,7 +3,7 @@ package slashquery
 import (
 	"io/ioutil"
 
-	"gopkg.in/yaml.v2"
+	"github.com/go-yaml/yaml"
 )
 
 // New return a new slashquery instance
