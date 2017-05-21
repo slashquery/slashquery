@@ -41,4 +41,10 @@ func main() {
 		fmt.Printf("plugins= %+v\n", v.Plugins)
 		println()
 	}
+
+	for r, v := range sq.Upstreams {
+		fmt.Printf("upstream = %+v\n", r)
+		fmt.Printf("servers = %+v\n", v.Servers)
+		println()
+	}
 }

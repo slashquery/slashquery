@@ -13,8 +13,8 @@ get:
 	${GO} get
 
 build: get
-	${GO} get -u github.com/go-yaml/yaml;
-	${GO} get -u github.com/nbari/violetear;
+	#${GO} get -u github.com/go-yaml/yaml;
+	#${GO} get -u github.com/nbari/violetear;
 	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
 
 clean:

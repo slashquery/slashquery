@@ -32,3 +32,8 @@ upstreams:
     servers:
       - httpbin.org
       - eu.httpbin.org
+  foo:
+    servers:
+      - first
+      - next
+      - last
