@@ -39,7 +39,6 @@ func main() {
 		fmt.Printf("path = %+v\n", v.Path)
 		fmt.Printf("upstream = %+v\n", v.Upstream)
 		fmt.Printf("plugins= %+v\n", v.Plugins)
-		fmt.Printf("servers = %+v\n", v.Servers)
 		println()
 	}
 }

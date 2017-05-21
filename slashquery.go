@@ -10,7 +10,6 @@ type Route struct {
 	Path     string
 	Upstream string
 	Plugins  []string
-	Servers  []string
 }
 
 type Upstream struct {
