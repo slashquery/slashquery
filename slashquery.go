@@ -1,5 +1,7 @@
 package slashquery
 
+import "time"
+
 type Slashquery struct {
 	Config    map[string]string
 	Routes    map[string]Route
@@ -19,6 +21,7 @@ type Upstream struct {
 
 // Servers keep IP's from upstreams (needs a resolver)
 type Servers struct {
-	IPs  []string
-	last string
+	Addresses []string
+	Expire    time.Time
+	last      string
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/slashquery/resolver"
 	"github.com/slashquery/slashquery"
@@ -48,9 +49,13 @@ func main() {
 		fmt.Printf("upstream = %+v\n", k)
 		fmt.Printf("servers = %+v\n", v.Servers)
 		for _, v := range v.Servers {
-			IPs, _ := r.Resolve(v)
+			ans, err := r.Resolve(v)
+			if err != nil {
+				fmt.Printf("err = %+v\n", err)
+			}
 			sq.Servers[k] = slashquery.Servers{
-				IPs: IPs,
+				Addresses: ans.Addresses,
+				Expire:    time.Now().Add(time.Duration(ans.TTL) * time.Second),
 			}
 		}
 		println()
