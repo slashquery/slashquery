@@ -16,5 +16,6 @@ func New(file string) (*Slashquery, error) {
 	if err := yaml.Unmarshal(ymlFile, &s); err != nil {
 		return nil, err
 	}
+	s.Servers = make(map[string]Servers)
 	return &s, nil
 }

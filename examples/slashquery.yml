@@ -34,6 +34,4 @@ upstreams:
       - eu.httpbin.org
   foo:
     servers:
-      - first
-      - next
-      - last
+      - requestb.in

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/slashquery/resolver"
 	"github.com/slashquery/slashquery"
 )
 
@@ -42,9 +43,21 @@ func main() {
 		println()
 	}
 
-	for r, v := range sq.Upstreams {
-		fmt.Printf("upstream = %+v\n", r)
+	r, _ := resolver.New("8.8.8.8")
+	for k, v := range sq.Upstreams {
+		fmt.Printf("upstream = %+v\n", k)
 		fmt.Printf("servers = %+v\n", v.Servers)
+		for _, v := range v.Servers {
+			IPs, _ := r.Resolve(v)
+			sq.Servers[k] = slashquery.Servers{
+				IPs: IPs,
+			}
+		}
 		println()
+	}
+
+	for k, v := range sq.Servers {
+		fmt.Printf("k = %+v\n", k)
+		fmt.Printf("v = %+v\n", v)
 	}
 }
