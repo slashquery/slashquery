@@ -3,6 +3,7 @@
 config:
   host: ~
   port: 8080
+  resolver: 8.8.8.8
 
 routes:
   ~: # api.slashquery.com/ -> http://httpbin.org/*

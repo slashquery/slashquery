@@ -1,12 +1,17 @@
 package slashquery
 
-import "time"
+import (
+	"time"
+
+	"github.com/slashquery/resolver"
+)
 
 type Slashquery struct {
 	Config    map[string]string
 	Routes    map[string]Route
 	Upstreams map[string]Upstream
 	Servers   map[string]Servers
+	Resolver  *resolver.Resolver
 }
 
 type Route struct {
