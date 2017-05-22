@@ -37,6 +37,9 @@ func main() {
 	// Get upstream IP's
 	sq.ResolveUpstreams()
 
+	// Set Router
+	sq.Router()
+
 	for k, v := range sq.Servers {
 		fmt.Printf("k = %+v\n", k)
 		fmt.Printf("v = %+v\n", v)
