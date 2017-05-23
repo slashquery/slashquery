@@ -15,7 +15,7 @@ get:
 build: get
 	#${GO} get -u github.com/go-yaml/yaml;
 	#${GO} get -u github.com/nbari/violetear;
-	${GO} get -u github.com/miekg/dns;
+	# ${GO} get -u github.com/miekg/dns;
 	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
 
 clean:
