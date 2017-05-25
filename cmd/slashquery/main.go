@@ -42,7 +42,7 @@ func main() {
 	router := violetear.New()
 	router.LogRequests = true
 	for name, route := range sq.Routes {
-		router.Handle(fmt.Sprintf("%s/*", name), sq.SetupProxy(route))
+		router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route))
 	}
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),

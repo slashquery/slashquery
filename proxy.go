@@ -8,7 +8,7 @@ import (
 	"net/http/httputil"
 )
 
-func (sq *Slashquery) SetupProxy(route Route) *Proxy {
+func (sq *Slashquery) Proxy(route Route) *Proxy {
 	p := new(Proxy)
 
 	// scheme defaults to http
