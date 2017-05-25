@@ -1,6 +1,7 @@
 package slashquery
 
 import (
+	"net/http/httputil"
 	"time"
 
 	"github.com/slashquery/resolver"
@@ -15,9 +16,10 @@ type Slashquery struct {
 }
 
 type Route struct {
+	Host     string
 	Path     string
-	Upstream string
 	Plugins  []string
+	Upstream string
 }
 
 type Upstream struct {
@@ -29,4 +31,8 @@ type Servers struct {
 	Addresses []string
 	Expire    time.Time
 	last      string
+}
+
+type Proxy struct {
+	proxy *httputil.ReverseProxy
 }

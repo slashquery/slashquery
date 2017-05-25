@@ -39,8 +39,13 @@ func (sq *Slashquery) ResolveUpstreams() {
 		for _, server := range servers.Servers {
 			ans, err := sq.Resolver.Resolve(server)
 			if err != nil {
-				log.Printf("Could not resolve server: %q, %s", err)
+				log.Printf("Could not resolve server: %q, %s", server, err)
 			} else {
+				/*
+					    TODO
+						this will overwrite previous upstream
+						need to improve this to allow set of upstreams
+				*/
 				sq.Servers[upstream] = Servers{
 					Addresses: ans.Addresses,
 					Expire:    time.Now().Add(time.Duration(ans.TTL) * time.Second),

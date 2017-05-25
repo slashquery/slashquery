@@ -13,26 +13,32 @@ routes:
     plugins:
       - wfa
       - jwt
-  get: # api.slashquery.com/get/ -> http://httpbin.org/get/*
-    path: /get/*
+  get: # api.slashquery.com/get/ -> http://httpbin.org/get
+    path: /get
     upstream: httpbin
     host: httpbin.org
-  anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get/*
-    path: /get/*
+  anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
+    path: /get
     upstream: httpbin
     host: httpbin.org
-  headers: # api.slashquery.com/headers/ -> http://httpbin.org/<servers>/*
-    path: /headers/*
+  headers: # api.slashquery.com/headers/ -> http://httpbin.org/headers
+    path: /headers
     upstream: httpbin
+    host: httpbin.org
+  h: # api.slashquery.com/h/ -> http://httpbin.org/headers
+    path: /headers
+    upstream: httpbin
+    host: httpbin.org
   images: # api.slashquery.com/images/ -> http://<servers>/image/*
-    path: /image/*
+    path: /image/
     upstream: httpbin
+    host: httpbin.org
 
 upstreams:
   httpbin:
     servers:
       - httpbin.org
-      - eu.httpbin.org
+        # - eu.httpbin.org
   foo:
     servers:
       - requestb.in
