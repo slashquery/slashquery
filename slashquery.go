@@ -19,6 +19,7 @@ type Route struct {
 	Host     string
 	Path     string
 	Plugins  []string
+	Scheme   string
 	Upstream string
 }
 

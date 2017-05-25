@@ -6,32 +6,23 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
-	"time"
 )
 
-func (sq *Slashquery) SetupProxy(route Route) (*Proxy, error) {
+func (sq *Slashquery) SetupProxy(route Route) *Proxy {
 	p := new(Proxy)
-	u, err := url.Parse(fmt.Sprintf("http://%s/%s",
-		route.Host,
-		route.Path))
-	if err != nil {
-		return nil, err
-	}
 
-	targetQuery := u.RawQuery
+	// scheme defaults to http
+	scheme := route.Scheme
+	if scheme == "" {
+		scheme = "http"
+	}
 
 	p.proxy = &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			req.Host = route.Host
 			req.URL.Host = route.Host
 			req.URL.Path = route.Path
-			req.URL.Scheme = "http"
-			if targetQuery == "" || req.URL.RawQuery == "" {
-				req.URL.RawQuery = targetQuery + req.URL.RawQuery
-			} else {
-				req.URL.RawQuery = targetQuery + "&" + req.URL.RawQuery
-			}
+			req.URL.Scheme = scheme
 		},
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -42,10 +33,9 @@ func (sq *Slashquery) SetupProxy(route Route) (*Proxy, error) {
 				}
 				return sq.Balancer(network, port, route.Upstream)
 			},
-			TLSHandshakeTimeout: 10 * time.Second,
 		},
 	}
-	return p, nil
+	return p
 }
 
 func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {

@@ -21,6 +21,7 @@ routes:
     path: /get
     upstream: httpbin
     host: httpbin.org
+    scheme: https
   headers: # api.slashquery.com/headers/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin

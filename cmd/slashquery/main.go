@@ -42,15 +42,10 @@ func main() {
 	router := violetear.New()
 	router.LogRequests = true
 	for name, route := range sq.Routes {
-		proxy, err := sq.SetupProxy(route)
-		if err != nil {
-			log.Fatalf("Error creating the proxy: %s", err)
-		}
-		router.Handle(fmt.Sprintf("%s/*", name), proxy)
+		router.Handle(fmt.Sprintf("%s/*", name), sq.SetupProxy(route))
 	}
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
 		router),
 	)
-
 }
