@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-func (sq *Slashquery) Debug() bool {
-	return true
-}
-
 // Balancer round-robin the upstreams
 func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 	upstreams := sq.Upstreams[name].Servers

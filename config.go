@@ -31,3 +31,14 @@ func New(file string) (*Slashquery, error) {
 	s.Resolver = r
 	return &s, nil
 }
+
+func (sq *Slashquery) Debug() bool {
+	yes := []string{"y", "Y", "yes", "Yes", "YES", "true", "True", "TRUE", "on", "On", "ON"}
+	debug := sq.Config["debug"]
+	for _, item := range yes {
+		if item == debug {
+			return true
+		}
+	}
+	return false
+}
