@@ -8,16 +8,14 @@ import (
 	"net/http/httputil"
 )
 
-func (sq *Slashquery) Proxy(route Route) *Proxy {
-	p := new(Proxy)
-
+func (sq *Slashquery) Proxy(route Route) *httputil.ReverseProxy {
 	// scheme defaults to http
 	scheme := route.Scheme
 	if scheme == "" {
 		scheme = "http"
 	}
 
-	p.proxy = &httputil.ReverseProxy{
+	proxy := &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			req.Host = route.Host
 			req.URL.Host = route.Host
@@ -35,11 +33,5 @@ func (sq *Slashquery) Proxy(route Route) *Proxy {
 			},
 		},
 	}
-	return p
-}
-
-func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// TODO
-	// plugins may go here
-	p.proxy.ServeHTTP(w, r)
+	return proxy
 }

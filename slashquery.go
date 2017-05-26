@@ -1,7 +1,6 @@
 package slashquery
 
 import (
-	"net/http/httputil"
 	"time"
 
 	"github.com/slashquery/resolver"
@@ -32,8 +31,4 @@ type Servers struct {
 	Addresses []string
 	Expire    time.Time
 	last      string
-}
-
-type Proxy struct {
-	proxy *httputil.ReverseProxy
 }
