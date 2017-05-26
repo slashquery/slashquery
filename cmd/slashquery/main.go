@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"github.com/nbari/violetear"
+	"github.com/nbari/violetear/middleware"
+	"github.com/slashquery-plugins/waf"
 	"github.com/slashquery/slashquery"
 )
 
@@ -44,11 +46,18 @@ func main() {
 	router := violetear.New()
 	router.LogRequests = true
 	for name, route := range sq.Routes {
-		// path, proxyHandler, methods
-		if len(route.Methods) > 0 {
-			router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route), strings.Join(route.Methods, ", "))
+		// TODO
+		// prototyping plugin implementation
+		if len(route.Plugins) > 0 {
+			chain := middleware.New(waf.WAF)
+			router.Handle(fmt.Sprintf("%s/*", name), chain.Then(sq.Proxy(route)))
 		} else {
-			router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route))
+			// path, proxyHandler, methods
+			if len(route.Methods) > 0 {
+				router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route), strings.Join(route.Methods, ", "))
+			} else {
+				router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route))
+			}
 		}
 	}
 	log.Fatal(http.ListenAndServe(

@@ -22,6 +22,8 @@ routes:
     methods:
       - GET
       - HEAD
+    plugins:
+      - wfa
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
