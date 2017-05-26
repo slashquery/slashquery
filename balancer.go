@@ -5,13 +5,36 @@ import (
 	"log"
 	"math/rand"
 	"net"
+	"time"
 )
 
+func (sq *Slashquery) Debug() bool {
+	return true
+}
+
 // Balancer round-robin the upstreams
-func (sq *Slashquery) Balancer(network, port, name string) (net.Conn, error) {
-	endpoints := sq.Servers[name].Addresses
-	// TODO
-	// refresh DNS here
+func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
+	upstreams := sq.Upstreams[name].Servers
+	if sq.Debug() {
+		log.Printf("Upstreams: %s\n", upstreams)
+	}
+
+	// endpoints contain the IP's from the servers
+	var endpoints []string
+
+	// fill the endpoints
+	for _, upstream := range upstreams {
+		servers := sq.Servers[upstream]
+		if time.Since(servers.Expire) > 0 {
+			// TODO check for race conditions
+			go sq.ResolveUpstream(upstream)
+		}
+		endpoints = append(endpoints, servers.Addresses...)
+	}
+
+	if sq.Debug() {
+		log.Printf("Endpoints: %s\n", endpoints)
+	}
 
 	// loop until can connect to one endpoint
 	for {
@@ -19,8 +42,10 @@ func (sq *Slashquery) Balancer(network, port, name string) (net.Conn, error) {
 		if len(endpoints) == 0 {
 			break
 		}
+
 		// Select a random endpoint
-		i := rand.Int() % len(endpoints)
+		rand.Seed(time.Now().UnixNano())
+		i := rand.Intn(len(endpoints))
 		endpoint := endpoints[i]
 
 		// Try to connect

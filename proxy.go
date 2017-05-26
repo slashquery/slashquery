@@ -27,10 +27,11 @@ func (sq *Slashquery) Proxy(route Route) *httputil.ReverseProxy {
 			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
 				_, port, err := net.SplitHostPort(addr)
 				if err != nil {
-					return nil, fmt.Errorf("Error spliting address host:port: %s", err)
+					return nil, fmt.Errorf("Error getting port from address %q: %s", addr, err)
 				}
-				return sq.Balancer(network, port, route.Upstream)
+				return sq.Balancer(route.Upstream, network, port)
 			},
+			DisableKeepAlives: route.DisableKeepAlive,
 		},
 	}
 	return proxy

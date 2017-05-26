@@ -15,11 +15,12 @@ type Slashquery struct {
 }
 
 type Route struct {
-	Host     string
-	Path     string
-	Plugins  []string
-	Scheme   string
-	Upstream string
+	DisableKeepAlive bool
+	Host             string
+	Path             string
+	Plugins          []string
+	Scheme           string
+	Upstream         string
 }
 
 type Upstream struct {

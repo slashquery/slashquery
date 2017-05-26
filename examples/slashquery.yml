@@ -17,6 +17,7 @@ routes:
     path: /get
     upstream: httpbin
     host: httpbin.org
+    disablekeepalive: yes
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
@@ -39,7 +40,7 @@ upstreams:
   httpbin:
     servers:
       - httpbin.org
-        # - eu.httpbin.org
+      - eu.httpbin.org
   foo:
     servers:
       - requestb.in
