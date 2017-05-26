@@ -44,7 +44,7 @@ func (sq *Slashquery) ResolveUpstreams() {
 				/*
 					    TODO
 						this will overwrite previous upstream
-						need to improve this to allow set of upstreams
+						need to improve this to allow multiple sets of upstreams
 				*/
 				sq.Servers[upstream] = Servers{
 					Addresses: ans.Addresses,
