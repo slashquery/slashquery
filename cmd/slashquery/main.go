@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/nbari/violetear"
 	"github.com/slashquery/slashquery"
@@ -39,10 +40,16 @@ func main() {
 	// Get upstream IP's
 	sq.ResolveUpstreams()
 
+	// create router
 	router := violetear.New()
 	router.LogRequests = true
 	for name, route := range sq.Routes {
-		router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route))
+		// path, proxyHandler, methods
+		if len(route.Methods) > 0 {
+			router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route), strings.Join(route.Methods, ", "))
+		} else {
+			router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route))
+		}
 	}
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),

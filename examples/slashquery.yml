@@ -19,11 +19,15 @@ routes:
     upstream: httpbin
     host: httpbin.org
     disablekeepalive: yes
+    methods:
+      - GET
+      - HEAD
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
     host: httpbin.org
     scheme: https
+    insecure: yes
   headers: # api.slashquery.com/headers/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin
@@ -36,12 +40,16 @@ routes:
     path: /image/
     upstream: httpbin
     host: httpbin.org
+  response-headers:
+    path: /response-headers?Content-Type=text
+    upstream: httpbin
+    host: httpbin.org
 
 upstreams:
   httpbin:
     servers:
       - httpbin.org
-      - eu.httpbin.org
+      #- eu.httpbin.org
   foo:
     servers:
       - requestb.in

@@ -17,6 +17,8 @@ type Slashquery struct {
 type Route struct {
 	DisableKeepAlive bool
 	Host             string
+	Insecure         bool
+	Methods          []string
 	Path             string
 	Plugins          []string
 	Scheme           string
