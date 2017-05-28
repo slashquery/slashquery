@@ -13,7 +13,7 @@ func (sq *Slashquery) ResolveUpstreams() {
 			if err != nil {
 				log.Printf("Could not resolve server: %q, %s", server, err)
 			} else {
-				sq.Servers[server] = Servers{
+				sq.Servers[server] = &Servers{
 					Addresses: ans.Addresses,
 					Expire:    time.Now().Add(time.Duration(ans.TTL) * time.Second),
 				}
@@ -31,7 +31,7 @@ func (sq *Slashquery) ResolveUpstream(upstream string) {
 	if err != nil {
 		log.Printf("Could not resolve server: %q, %s", upstream, err)
 	} else {
-		sq.Servers[upstream] = Servers{
+		sq.Servers[upstream] = &Servers{
 			Addresses: ans.Addresses,
 			Expire:    time.Now().Add(time.Duration(ans.TTL) * time.Second),
 		}

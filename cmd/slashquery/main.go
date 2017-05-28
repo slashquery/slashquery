@@ -39,11 +39,17 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	// setup gateway
+	if err := sq.Setup(); err != nil {
+		log.Fatalln(err)
+	}
+
 	// Get upstream IP's
 	sq.ResolveUpstreams()
 
 	// create router
 	router := violetear.New()
+	router.Verbose = true
 	router.LogRequests = true
 	for name, route := range sq.Routes {
 		methods := strings.Join(route.Methods, ",")

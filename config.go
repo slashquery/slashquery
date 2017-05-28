@@ -20,7 +20,7 @@ func New(file string) (*Slashquery, error) {
 	}
 
 	// to store upstream IP's
-	s.Servers = make(map[string]Servers)
+	s.Servers = make(map[string]*Servers)
 
 	// start resolver
 	nameserver := s.Config["resolver"]

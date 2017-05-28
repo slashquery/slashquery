@@ -7,30 +7,20 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
 	"time"
 )
 
-func (sq *Slashquery) Proxy(route Route) *httputil.ReverseProxy {
-	// scheme defaults to http
-	scheme := route.Scheme
-	if scheme == "" {
-		scheme = "http"
-	}
-
-	u, _ := url.Parse(fmt.Sprintf("%s://%s%s", scheme, route.Host, route.Path))
-	targetQuery := u.RawQuery
-
+func (sq *Slashquery) Proxy(route *Route) *httputil.ReverseProxy {
 	proxy := &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			req.Host = route.Host
-			req.URL.Host = u.Host
-			req.URL.Path = u.Path
-			req.URL.Scheme = u.Scheme
-			if targetQuery == "" || req.URL.RawQuery == "" {
-				req.URL.RawQuery = targetQuery + req.URL.RawQuery
+			req.URL.Host = route.Host
+			req.URL.Path = route.Path
+			req.URL.Scheme = route.Scheme
+			if route.rawQuery == "" || req.URL.RawQuery == "" {
+				req.URL.RawQuery = route.rawQuery + req.URL.RawQuery
 			} else {
-				req.URL.RawQuery = targetQuery + "&" + req.URL.RawQuery
+				req.URL.RawQuery = route.rawQuery + "&" + req.URL.RawQuery
 			}
 		},
 		Transport: &http.Transport{

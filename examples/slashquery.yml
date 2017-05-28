@@ -13,7 +13,6 @@ routes:
     host: httpbin.org
     plugins:
       - wfa
-      - jwt
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
@@ -49,10 +48,7 @@ routes:
     upstream: httpbin
     host: httpbin.org
   test-waf:
-    path: /1h7w2uz1
-    upstream: requestbin
-    host: requestb.in
-    scheme: https
+    url: https://requestb.in/1h7w2uz1
     plugins:
       - waf
 
@@ -60,7 +56,7 @@ upstreams:
   httpbin:
     servers:
       - httpbin.org
-      #- eu.httpbin.org
+        # - eu.httpbin.org
   foo:
     servers:
       - requestb.in
