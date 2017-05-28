@@ -34,6 +34,8 @@ routes:
     path: /headers
     upstream: httpbin
     host: httpbin.org
+    plugins:
+      - wfa
   h: # api.slashquery.com/h/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin
@@ -46,6 +48,13 @@ routes:
     path: /response-headers?Content-Type=text
     upstream: httpbin
     host: httpbin.org
+  test-waf:
+    path: /1h7w2uz1
+    upstream: requestbin
+    host: requestb.in
+    scheme: https
+    plugins:
+      - waf
 
 upstreams:
   httpbin:
@@ -53,5 +62,8 @@ upstreams:
       - httpbin.org
       #- eu.httpbin.org
   foo:
+    servers:
+      - requestb.in
+  requestbin:
     servers:
       - requestb.in
