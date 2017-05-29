@@ -12,7 +12,6 @@ routes:
     upstream: httpbin
     host: httpbin.org
     plugins:
-      - wfa
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
@@ -22,7 +21,6 @@ routes:
       - GET
       - HEAD
     plugins:
-      - wfa
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
@@ -34,7 +32,6 @@ routes:
     upstream: httpbin
     host: httpbin.org
     plugins:
-      - wfa
   h: # api.slashquery.com/h/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin
@@ -53,7 +50,7 @@ routes:
   test-waf:
     url: https://requestb.in/1h7w2uz1
     plugins:
-      - waf
+      - waf.WAF
 
 upstreams:
   httpbin:

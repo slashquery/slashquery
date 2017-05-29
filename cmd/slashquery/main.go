@@ -1,5 +1,7 @@
 package main
 
+//go:generate go-bindata-assetfs
+
 import (
 	"flag"
 	"fmt"
@@ -56,7 +58,11 @@ func main() {
 		// TODO
 		// prototyping plugin implementation
 		if len(route.Plugins) > 0 {
-			chain := middleware.New(waf.WAF)
+			chain := middleware.New()
+			for _, plugin := range route.Plugins {
+				fmt.Printf("plugin = %+v\n", plugin)
+				chain = chain.Append(waf.WAF)
+			}
 			router.Handle(fmt.Sprintf("%s/*", name), chain.Then(sq.Proxy(route)), methods)
 		} else {
 			//path, proxyHandler, methods
