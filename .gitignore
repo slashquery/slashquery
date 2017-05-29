@@ -1,7 +1,6 @@
 slashquery
 !*slashquery/
 coverage.*
-routes.go
 .goxc.local.json
 .goxc.json
 build
