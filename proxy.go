@@ -10,7 +10,9 @@ import (
 	"time"
 )
 
-func (sq *Slashquery) Proxy(route *Route) *httputil.ReverseProxy {
+// Proxy return instanse of httputil.ReverseProxy
+func (sq *Slashquery) Proxy(r string) *httputil.ReverseProxy {
+	route := sq.Routes[r]
 	proxy := &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			req.Host = route.Host

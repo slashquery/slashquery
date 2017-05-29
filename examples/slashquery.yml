@@ -51,6 +51,7 @@ routes:
     url: https://requestb.in/1h7w2uz1
     plugins:
       - waf.WAF
+      - cors.CORS
 
 upstreams:
   httpbin:

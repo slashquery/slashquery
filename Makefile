@@ -1,4 +1,4 @@
-.PHONY: all get test clean build cover compile goxc bintray install uninstall
+.PHONY: all get test clean build cover compile goxc bintray generate
 
 GO ?= go
 GO_XC = ${GOPATH}/bin/goxc -os="freebsd netbsd openbsd darwin linux"
@@ -9,10 +9,19 @@ DESTDIR ?= /usr/local
 
 all: clean build
 
+generate:
+	# make CONFIG=testdata/slashquery.yml
+	@if test -n "${CONFIG}"; then \
+	${GO} run genroutes.go -f ${CONFIG}; \
+	else \
+	${GO} run genroutes.go -f examples/slashquery.yml; \
+	fi;
+	goimports -w routes.go
+
 get:
 	${GO} get
 
-build: get
+build: get generate
 	#${GO} get -u github.com/go-yaml/yaml;
 	#${GO} get -u github.com/nbari/violetear;
 	#${GO} get -u github.com/miekg/dns;
@@ -20,7 +29,7 @@ build: get
 
 clean:
 	${GO} clean -i
-	@rm -rf slashquery *.debug *.out build debian
+	@rm -rf slashquery *.debug *.out build debian routes.go
 
 test: get
 	${GO} test -race -v

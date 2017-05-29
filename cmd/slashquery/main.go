@@ -1,6 +1,6 @@
 package main
 
-//go:generate go-bindata-assetfs
+//go:generate go run genroutes.go
 
 import (
 	"flag"
@@ -8,11 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/nbari/violetear"
-	"github.com/nbari/violetear/middleware"
-	"github.com/slashquery-plugins/waf"
 	"github.com/slashquery/slashquery"
 )
 
@@ -53,23 +50,9 @@ func main() {
 	router := violetear.New()
 	router.Verbose = true
 	router.LogRequests = true
-	for name, route := range sq.Routes {
-		methods := strings.Join(route.Methods, ",")
-		// TODO
-		// prototyping plugin implementation
-		if len(route.Plugins) > 0 {
-			chain := middleware.New()
-			for _, plugin := range route.Plugins {
-				fmt.Printf("plugin = %+v\n", plugin)
-				chain = chain.Append(waf.WAF)
-			}
-			router.Handle(fmt.Sprintf("%s/*", name), chain.Then(sq.Proxy(route)), methods)
-		} else {
-			//path, proxyHandler, methods
-			methods := strings.Join(route.Methods, ",")
-			router.Handle(fmt.Sprintf("%s/*", name), sq.Proxy(route), methods)
-		}
-	}
+
+	sq.AddRoutes(router)
+
 	log.Fatal(http.ListenAndServe(
 		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
 		router),
