@@ -47,6 +47,9 @@ routes:
     path: /response-headers?Content-Type=text
     upstream: httpbin
     host: httpbin.org
+  response-headers2:
+    url: http://httpbin.org/response-headers?Content-Type=text
+    upstream: httpbin
   test-waf:
     url: https://requestb.in/1h7w2uz1
     plugins:
