@@ -11,8 +11,6 @@ routes:
     upstream: httpbin
     host: httpbin.org
     plugins:
-      - wfa
-      - jwt
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
