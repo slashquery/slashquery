@@ -37,7 +37,7 @@ type Route struct {
 	Methods []string
 
 	// Plugins list of plugins to use (middleware)
-	Plugins []string
+	Plugins [][]string
 
 	// Insecure is set to yes will skip the certificate verification
 	Insecure bool

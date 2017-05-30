@@ -50,8 +50,9 @@ routes:
   test-waf:
     url: https://requestb.in/1h7w2uz1
     plugins:
-      - waf.WAF
-      - cors.CORS
+      - ["github.com/slashquery-plugins/waf", "waf.WAF"]
+      - ["github.com/slashquery-plugins/cors", "cors.CORS"]
+      - ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
 
 upstreams:
   httpbin:
