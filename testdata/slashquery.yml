@@ -11,6 +11,10 @@ routes:
     upstream: httpbin
     host: httpbin.org
     plugins:
+      - ["github.com/slashquery-plugins/waf", "waf.WAF"]
+      - ["github.com/slashquery-plugins/cors", "cors.CORS"]
+      - ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
+      - ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
