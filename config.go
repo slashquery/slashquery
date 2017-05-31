@@ -2,8 +2,10 @@ package slashquery
 
 import (
 	"io/ioutil"
+	"log"
 
-	"gopkg.in/yaml.v2"
+	"github.com/go-yaml/yaml"
+	"github.com/slashquery/resolver"
 )
 
 // New return a new slashquery instance
@@ -16,5 +18,27 @@ func New(file string) (*Slashquery, error) {
 	if err := yaml.Unmarshal(ymlFile, &s); err != nil {
 		return nil, err
 	}
+
+	// to store upstream IP's
+	s.Servers = make(map[string]*Servers)
+
+	// start resolver
+	nameserver := s.Config["resolver"]
+	r, err := resolver.New(nameserver)
+	if err != nil {
+		log.Fatalf("Error starting resolver: %s", err)
+	}
+	s.Resolver = r
 	return &s, nil
+}
+
+func (sq *Slashquery) Debug() bool {
+	yes := []string{"y", "Y", "yes", "Yes", "YES", "true", "True", "TRUE", "on", "On", "ON"}
+	debug := sq.Config["debug"]
+	for _, item := range yes {
+		if item == debug {
+			return true
+		}
+	}
+	return false
 }

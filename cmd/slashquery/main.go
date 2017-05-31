@@ -4,8 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/nbari/violetear"
 	"github.com/slashquery/slashquery"
 )
 
@@ -34,12 +36,26 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	for r, v := range sq.Routes {
-		fmt.Printf("route = %+v\n", r)
-		fmt.Printf("path = %+v\n", v.Path)
-		fmt.Printf("upstream = %+v\n", v.Upstream)
-		fmt.Printf("plugins= %+v\n", v.Plugins)
-		fmt.Printf("servers = %+v\n", v.Servers)
-		println()
+	// setup gateway
+	if err := sq.Setup(); err != nil {
+		log.Fatalln(err)
 	}
+
+	// Get upstream IP's
+	sq.ResolveUpstreams()
+
+	// create router
+	router := violetear.New()
+	router.Verbose = true
+	router.LogRequests = true
+	if sq.Config["request-id"] != "" {
+		router.RequestID = sq.Config["request-id"]
+	}
+
+	sq.AddRoutes(router)
+
+	log.Fatal(http.ListenAndServe(
+		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
+		router),
+	)
 }

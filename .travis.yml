@@ -1,0 +1,20 @@
+language: go
+
+go:
+  - 1.8
+  - tip
+
+before_install:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/go-yaml/yaml
+  - go get github.com/mattn/goveralls
+  - go get github.com/nbari/violetear
+  - go get github.com/slashquery/resolver
+  - if ! go get github.com/golang/tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+
+script:
+  - go test -v -covermode=count -coverprofile=coverage.out
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
