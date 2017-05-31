@@ -48,7 +48,7 @@ routes:
     url: http://httpbin.org/response-headers?Content-Type=text
     upstream: httpbin
   test-waf:
-    url: https://requestb.in/1i8xv621
+    url: https://requestb.in/1jkif7e1
     plugins:
       - ["github.com/slashquery-plugins/waf", "waf.WAF"]
       - ["github.com/slashquery-plugins/cors", "cors.CORS"]
