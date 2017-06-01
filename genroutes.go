@@ -65,20 +65,39 @@ func main() {
 
 	//path, proxyHandler, methods
 	for name, route := range sq.Routes {
-		methods := strings.Join(route.Methods, ",")
-		var b bytes.Buffer
+		var (
+			path, fragment string
+			b              bytes.Buffer
+			methods        = strings.Join(route.Methods, ",")
+		)
+		u := strings.Split(name, "#")
+		if u[0] == "~" {
+			u[0] = ""
+		}
+		path = u[0]
+		if len(u) > 1 {
+			fragment = fmt.Sprintf("#%s", u[1])
+		}
 		if len(route.Plugins) > 0 {
 			var plugins []string
 			for _, plugin := range route.Plugins {
 				imports = append(imports, plugin[0])
 				plugins = append(plugins, plugin[1])
 			}
-			b.WriteString(fmt.Sprintf(`router.Handle("%s/*", middleware.New(%s).Then(sq.Proxy(%q))`,
-				name,
-				strings.Join(plugins, ","),
-				name))
+			b.WriteString(
+				fmt.Sprintf(`router.Handle("%s/*%s", middleware.New(%s).Then(sq.Proxy(%q))`,
+					path,
+					fragment,
+					strings.Join(plugins, ","),
+					name),
+			)
 		} else {
-			b.WriteString(fmt.Sprintf(`router.Handle("%s/*", sq.Proxy(%q)`, name, name))
+			b.WriteString(
+				fmt.Sprintf(`router.Handle("%s/*%s", sq.Proxy(%q)`,
+					path,
+					fragment,
+					name),
+			)
 		}
 		if methods == "" {
 			b.WriteString(")")

@@ -13,6 +13,13 @@ routes:
     upstream: httpbin
     host: httpbin.org
     plugins:
+
+  ~#slashquery.v2: # api.slashquery.com/ -> http://httpbin.org/*
+    path:
+    upstream: httpbin
+    host: httpbin.org
+    plugins:
+
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
@@ -22,33 +29,49 @@ routes:
       - GET
       - HEAD
     plugins:
+
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
     upstream: httpbin
     host: httpbin.org
     scheme: https
     insecure: yes
+
   headers: # api.slashquery.com/headers/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin
     host: httpbin.org
     plugins:
+
   h: # api.slashquery.com/h/ -> http://httpbin.org/headers
     path: /headers
     upstream: httpbin
+
   images: # api.slashquery.com/images/ -> http://<servers>/image/*
     path: /image/
     upstream: httpbin
     host: httpbin.org
+
   response-headers:
     path: /response-headers?Content-Type=text
     upstream: httpbin
     host: httpbin.org
+
   response-headers2:
     url: http://httpbin.org/response-headers?Content-Type=text
     upstream: httpbin
+
   test-waf:
-    url: https://requestb.in/t9e3wut9
+    url: https://requestb.in/1mdz4om1
+    plugins:
+      - ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
+      - ["github.com/slashquery-plugins/waf", "waf.WAF"]
+      - ["github.com/slashquery-plugins/cors", "cors.CORS"]
+      - ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
+      - ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]
+
+  test-waf#slashquery.v2:
+    url: https://requestb.in/pz12ghpz
     plugins:
       - ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
       - ["github.com/slashquery-plugins/waf", "waf.WAF"]
