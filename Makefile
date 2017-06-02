@@ -1,11 +1,8 @@
 .PHONY: all get test clean build cover generate
 
-GO ?= go
-GO_XC = ${GOPATH}/bin/goxc -os="freebsd netbsd openbsd darwin linux"
-GOXC_FILE = .goxc.json
-GOXC_FILE_LOCAL = .goxc.local.json
+GO?=go
 VERSION=$(shell git describe --tags --always)
-DESTDIR ?= /usr/local
+DESTDIR?=/usr/local
 
 all: clean build
 
@@ -29,7 +26,7 @@ build: get generate
 
 clean:
 	${GO} clean -i
-	@rm -rf slashquery *.debug *.out build debian routes.go
+	@rm -rf slashquery *.debug *.out routes.go
 
 test: get
 	${GO} test -race -v
