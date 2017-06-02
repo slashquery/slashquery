@@ -28,9 +28,6 @@ build: get generate
 	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
 
 clean:
-	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
-
-clean:
 	${GO} clean -i
 	@rm -rf slashquery *.debug *.out build debian routes.go
 
