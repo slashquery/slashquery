@@ -1,4 +1,4 @@
-.PHONY: all get test clean build cover compile goxc bintray generate
+.PHONY: all get test clean build cover generate
 
 GO ?= go
 GO_XC = ${GOPATH}/bin/goxc -os="freebsd netbsd openbsd darwin linux"
@@ -22,9 +22,12 @@ get:
 	${GO} get
 
 build: get generate
-	#${GO} get -u github.com/go-yaml/yaml;
-	#${GO} get -u github.com/nbari/violetear;
-	#${GO} get -u github.com/miekg/dns;
+#	${GO} get -u github.com/go-yaml/yaml;
+#	${GO} get -u github.com/nbari/violetear;
+#	${GO} get -u github.com/miekg/dns;
+	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
+
+clean:
 	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
 
 clean:
@@ -38,29 +41,3 @@ cover:
 	${GO} test -cover && \
 	${GO} test -coverprofile=coverage.out  && \
 	${GO} tool cover -html=coverage.out
-
-compile: clean goxc
-
-goxc:
-	$(shell echo '{\n  "ConfigVersion": "0.9",' > $(GOXC_FILE))
-	$(shell echo '  "AppName": "slashquery",' >> $(GOXC_FILE))
-	$(shell echo '  "ArtifactsDest": "build",' >> $(GOXC_FILE))
-	$(shell echo '  "PackageVersion": "${VERSION}",' >> $(GOXC_FILE))
-	$(shell echo '  "TaskSettings": {' >> $(GOXC_FILE))
-	$(shell echo '    "bintray": {' >> $(GOXC_FILE))
-	$(shell echo '      "downloadspage": "bintray.md",' >> $(GOXC_FILE))
-	$(shell echo '      "package": "slashquery",' >> $(GOXC_FILE))
-	$(shell echo '      "repository": "slashquery",' >> $(GOXC_FILE))
-	$(shell echo '      "subject": "nbari"' >> $(GOXC_FILE))
-	$(shell echo '    }\n  },' >> $(GOXC_FILE))
-	$(shell echo '  "BuildSettings": {' >> $(GOXC_FILE))
-	$(shell echo '    "LdFlags": "-s -w -X main.version=${VERSION}"' >> $(GOXC_FILE))
-	$(shell echo '  }\n}' >> $(GOXC_FILE))
-	$(shell echo '{\n "ConfigVersion": "0.9",' > $(GOXC_FILE_LOCAL))
-	$(shell echo ' "TaskSettings": {' >> $(GOXC_FILE_LOCAL))
-	$(shell echo '  "bintray": {\n   "apikey": "$(BINTRAY_APIKEY)"' >> $(GOXC_FILE_LOCAL))
-	$(shell echo '  }\n } \n}' >> $(GOXC_FILE_LOCAL))
-	${GO_XC}
-
-bintray:
-	${GO_XC} bintray

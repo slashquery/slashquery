@@ -5,6 +5,7 @@ import (
 	"net/url"
 )
 
+// Setup configures the upstream
 func (sq *Slashquery) Setup() error {
 	for _, route := range sq.Routes {
 		if route.URL != "" {

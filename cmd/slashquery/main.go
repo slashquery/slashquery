@@ -50,6 +50,9 @@ func main() {
 	router := violetear.New()
 	router.Verbose = true
 	router.LogRequests = true
+	if sq.Config["request-id"] != "" {
+		router.RequestID = sq.Config["request-id"]
+	}
 
 	sq.AddRoutes(router)
 
