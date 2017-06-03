@@ -1,5 +1,7 @@
 package slashquery
 
+//go:generate go run genroutes.go -f examples/slashquery.yml
+
 import (
 	"time"
 

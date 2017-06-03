@@ -6,8 +6,8 @@ DESTDIR?=/usr/local
 
 all: clean build
 
+# make CONFIG=testdata/slashquery.yml
 generate:
-	# make CONFIG=testdata/slashquery.yml
 	@if test -n "${CONFIG}"; then \
 	${GO} run genroutes.go -f ${CONFIG}; \
 	else \

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 	"text/template"
 	"time"
@@ -25,8 +26,8 @@ package slashquery
 import (
 	"github.com/nbari/violetear"
 	"github.com/nbari/violetear/middleware"
-	{{- range .Imports }}
-	{{ printf "%q" . }}
+	{{- range $k, $i := .Imports }}
+	{{ printf "%q" $i }}
 	{{- end }}
 )
 
@@ -42,7 +43,7 @@ func main() {
 	var (
 		f       = flag.String("f", "slashquery.yaml", "Configuration `slashquery.yaml`")
 		paths   []string
-		imports []string
+		imports map[string]string = make(map[string]string)
 	)
 
 	flag.Parse()
@@ -81,14 +82,14 @@ func main() {
 		if len(route.Plugins) > 0 {
 			var plugins []string
 			for _, plugin := range route.Plugins {
-				imports = append(imports, plugin[0])
+				imports[plugin[0]] = plugin[0]
 				plugins = append(plugins, plugin[1])
 			}
 			b.WriteString(
 				fmt.Sprintf(`router.Handle("%s/*%s", middleware.New(%s).Then(sq.Proxy(%q))`,
 					path,
 					fragment,
-					strings.Join(plugins, ","),
+					strings.Join(plugins, ", "),
 					name),
 			)
 		} else {
@@ -107,10 +108,12 @@ func main() {
 		paths = append(paths, b.String())
 	}
 
+	sort.Strings(paths)
+
 	packageTemplate.Execute(routes, struct {
 		Timestamp time.Time
 		Config    string
-		Imports   []string
+		Imports   map[string]string
 		Routes    []string
 	}{
 		Timestamp: time.Now(),

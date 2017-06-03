@@ -1,11 +1,12 @@
 # slashquery configuration file
 ---
 config:
+  debug: yes
   host: ~
   port: 8080
-  resolver: 8.8.8.8
-  debug: yes
   request-id: X-Request-Id
+  resolver: 8.8.8.8
+  socket: /tmp/slashquery.sock
 
 routes:
   ~: # api.slashquery.com/ -> http://httpbin.org/*
@@ -60,8 +61,9 @@ routes:
   response-headers2:
     url: http://httpbin.org/response-headers?Content-Type=text
     upstream: httpbin
+
   test-waf:
-    url: https://requestb.in/1mdz4om1
+    url: https://requestb.in/sc7rohsc
     plugins:
       - ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
       - ["github.com/slashquery-plugins/waf", "waf.WAF"]

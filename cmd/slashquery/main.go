@@ -1,11 +1,10 @@
 package main
 
-//go:generate go run genroutes.go
-
 import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 
@@ -54,10 +53,20 @@ func main() {
 		router.RequestID = sq.Config["request-id"]
 	}
 
+	// go:generate go run genroutes.go
 	sq.AddRoutes(router)
 
-	log.Fatal(http.ListenAndServe(
-		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
-		router),
-	)
+	// listen on socket or address:port
+	if sq.Config["socket"] != "" {
+		l, err := net.Listen("unix", sq.Config["socket"])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Fatalln(http.Serve(l, router))
+	} else {
+		log.Fatalln(http.ListenAndServe(
+			fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
+			router),
+		)
+	}
 }
