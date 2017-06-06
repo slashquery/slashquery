@@ -41,7 +41,6 @@ upstreams:
   httpbin:
     servers:
       - httpbin.org
-        # - eu.httpbin.org
   foo:
     servers:
       - requestb.in
