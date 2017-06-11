@@ -32,6 +32,7 @@ func New(file string) (*Slashquery, error) {
 	return &s, nil
 }
 
+// Debug enable/disable based on config["debug"] value
 func (sq *Slashquery) Debug() bool {
 	yes := []string{"y", "Y", "yes", "Yes", "YES", "true", "True", "TRUE", "on", "On", "ON"}
 	debug := sq.Config["debug"]

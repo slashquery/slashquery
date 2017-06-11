@@ -8,6 +8,7 @@ import (
 	"github.com/slashquery/resolver"
 )
 
+// Slashquery structure
 type Slashquery struct {
 	Config    map[string]string
 	Routes    map[string]*Route
@@ -51,6 +52,7 @@ type Route struct {
 	rawQuery string
 }
 
+// Upstream structure
 type Upstream struct {
 	Servers []string
 	Timeout int
