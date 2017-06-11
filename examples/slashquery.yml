@@ -82,6 +82,7 @@ routes:
 
 upstreams:
   httpbin:
+    timeout: 3
     servers:
       - httpbin.org
         # - eu.httpbin.org

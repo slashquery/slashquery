@@ -53,6 +53,7 @@ type Route struct {
 
 type Upstream struct {
 	Servers []string
+	Timeout int
 }
 
 // Servers keep IP's from upstreams (needs a resolver)

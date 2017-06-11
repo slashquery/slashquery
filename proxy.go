@@ -32,8 +32,7 @@ func (sq *Slashquery) Proxy(r string) *httputil.ReverseProxy {
 				if err != nil {
 					return nil, fmt.Errorf("Error getting port from address %q: %s", addr, err)
 				}
-				timeout := time.Second * 5
-				return sq.Balancer(route.Upstream, network, port, timeout)
+				return sq.Balancer(route.Upstream, network, port)
 			},
 			MaxIdleConns:          100,
 			IdleConnTimeout:       90 * time.Second,

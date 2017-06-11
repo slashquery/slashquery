@@ -9,8 +9,15 @@ import (
 )
 
 // Balancer round-robin the upstreams
-func (sq *Slashquery) Balancer(name, network, port string, timeout time.Duration) (net.Conn, error) {
+func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 	upstreams := sq.Upstreams[name].Servers
+
+	// timeout defaults to 10 seconds
+	timeout := sq.Upstreams[name].Timeout
+	if timeout <= 0 {
+		timeout = 10
+	}
+
 	if sq.Debug() {
 		log.Printf("Upstreams: %s\n", upstreams)
 	}
@@ -22,7 +29,6 @@ func (sq *Slashquery) Balancer(name, network, port string, timeout time.Duration
 	for _, upstream := range upstreams {
 		servers := sq.Servers[upstream]
 		if time.Since(servers.Expire) > 0 {
-			// TODO check for race conditions
 			go sq.ResolveUpstream(upstream)
 		}
 		endpoints = append(endpoints, servers.Addresses...)
@@ -45,7 +51,10 @@ func (sq *Slashquery) Balancer(name, network, port string, timeout time.Duration
 		endpoint := endpoints[i]
 
 		// Try to connect
-		conn, err := net.DialTimeout(network, fmt.Sprintf("%s:%s", endpoint, port), timeout)
+		conn, err := net.DialTimeout(network,
+			fmt.Sprintf("%s:%s", endpoint, port),
+			time.Duration(timeout)*time.Second,
+		)
 		if err != nil {
 			log.Printf("Error connecting to server %q: %s\n", endpoint, err)
 			// Failure: remove the endpoint from the current list and try again.
