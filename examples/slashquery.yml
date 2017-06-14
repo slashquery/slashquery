@@ -13,13 +13,11 @@ routes:
     path:
     upstream: httpbin
     host: httpbin.org
-    plugins:
 
   ~#slashquery.v2: # api.slashquery.com/ -> http://httpbin.org/*
     path:
     upstream: httpbin
     host: httpbin.org
-    plugins:
 
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
@@ -29,7 +27,6 @@ routes:
     methods:
       - GET
       - HEAD
-    plugins:
 
   anotherpath: # api.slashquery.com/anotherpath/ -> http://httpbin.org/get
     path: /get
@@ -42,7 +39,6 @@ routes:
     path: /headers
     upstream: httpbin
     host: httpbin.org
-    plugins:
 
   h: # api.slashquery.com/h/ -> http://httpbin.org/headers
     path: /headers
