@@ -65,20 +65,20 @@ routes:
   test-waf:
     url: https://requestb.in/sc7rohsc
     plugins:
-      - ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
-      - ["github.com/slashquery-plugins/waf", "waf.WAF"]
-      - ["github.com/slashquery-plugins/cors", "cors.CORS"]
-      - ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
-      - ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]
+      - requestid
+      - waf
+      - cors
+      - prometheus
+      - csrf
 
   test-waf#slashquery.v2:
     url: https://requestb.in/pz12ghpz
     plugins:
-      - ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
-      - ["github.com/slashquery-plugins/waf", "waf.WAF"]
-      - ["github.com/slashquery-plugins/cors", "cors.CORS"]
-      - ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
-      - ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]
+      - requestid
+      - waf
+      - cors
+      - prometheus
+      - csrf
 
 upstreams:
   httpbin:
@@ -92,3 +92,10 @@ upstreams:
   requestbin:
     servers:
       - requestb.in
+
+plugins:
+  requestid: ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
+  waf: ["github.com/slashquery-plugins/waf", "waf.WAF"]
+  cors: ["github.com/slashquery-plugins/cors", "cors.CORS"]
+  prometheus: ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
+  csrf: ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]

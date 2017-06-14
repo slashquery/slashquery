@@ -11,10 +11,11 @@ import (
 // Slashquery structure
 type Slashquery struct {
 	Config    map[string]string
-	Routes    map[string]*Route
-	Upstreams map[string]*Upstream
-	Servers   map[string]*Servers
+	Plugins   map[string][][]string
 	Resolver  *resolver.Resolver
+	Routes    map[string]*Route
+	Servers   map[string]*Servers
+	Upstreams map[string]*Upstream
 }
 
 // Route define an upstream
@@ -40,7 +41,7 @@ type Route struct {
 	Methods []string
 
 	// Plugins list of plugins to use (middleware)
-	Plugins [][]string
+	Plugins []string
 
 	// Insecure is set to yes will skip the certificate verification
 	Insecure bool
