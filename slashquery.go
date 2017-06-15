@@ -11,7 +11,7 @@ import (
 // Slashquery structure
 type Slashquery struct {
 	Config    map[string]string
-	Plugins   map[string][][]string
+	Plugins   map[string][]string
 	Resolver  *resolver.Resolver
 	Routes    map[string]*Route
 	Servers   map[string]*Servers
