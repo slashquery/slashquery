@@ -82,8 +82,13 @@ func main() {
 		if len(route.Plugins) > 0 {
 			var plugins []string
 			for _, plugin := range route.Plugins {
-				imports[plugin[0]] = plugin[0]
-				plugins = append(plugins, plugin[1])
+				p, ok := sq.Plugins[plugin]
+				if !ok {
+					fmt.Printf("\nPlugin: %q not found, check the plugins section\n\n", plugin)
+					os.Exit(1)
+				}
+				imports[p[0]] = p[0]
+				plugins = append(plugins, p[1])
 			}
 			b.WriteString(
 				fmt.Sprintf(`router.Handle("%s/*%s", middleware.New(%s).Then(sq.Proxy(%q))`,
