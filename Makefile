@@ -13,12 +13,13 @@ generate:
 	else \
 	${GO} run genroutes.go -f examples/slashquery.yml; \
 	fi;
-	goimports -w routes.go
+	${GOPATH}/bin/goimports -w routes.go
 
 get:
 	${GO} get
 
 build: get generate
+#	${GO} get -u golang.org/x/tools/cmd/goimports
 #	${GO} get -u github.com/go-yaml/yaml;
 #	${GO} get -u github.com/nbari/violetear;
 #	${GO} get -u github.com/miekg/dns;
