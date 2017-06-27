@@ -13,7 +13,6 @@ routes:
     plugins:
       - waf
       - cors
-      - prometheus
       - csrf
   get: # api.slashquery.com/get/ -> http://httpbin.org/get
     path: /get
@@ -49,5 +48,4 @@ upstreams:
 plugins:
   waf: ["github.com/slashquery-plugins/waf", "waf.WAF"]
   cors: ["github.com/slashquery-plugins/cors", "cors.CORS"]
-  prometheus: ["github.com/slashquery-plugins/prometheus", "prometheus.Prometheus"]
   csrf: ["github.com/slashquery-plugins/csrf", "csrf.CSRF"]

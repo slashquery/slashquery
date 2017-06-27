@@ -39,52 +39,8 @@ func main() {
 	}
 
 	if *b {
-		// Getting slashquery
-		if err := exec.Command("go", "get", "github.com/slashquery/slashquery").Run(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		// Getting all dependecies
-		sqPath := path.Join(build.Default.GOPATH, "src", "github.com", "slashquery", "slashquery")
-		cmd := exec.Command("/bin/sh", "-c", "go get -d ./...")
-		cmd.Dir = sqPath
-		if err := cmd.Run(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		// golang.org/x/tools/cmd/goimports
-		if err := exec.Command("go", "get", "golang.org/x/tools/cmd/goimports").Run(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		fmt.Println("Creating routes")
-		cmd = exec.Command("go", "run", "genroutes.go", "-f", *f)
-		cmd.Dir = sqPath
-		if err := cmd.Run(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		goimportsPath := path.Join(build.Default.GOPATH, "bin", "goimports")
-		cmd = exec.Command(goimportsPath, "-w", "routes.go")
-		cmd.Dir = sqPath
-		if err := cmd.Run(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		//get current version
-		cmd = exec.Command("git", "describe", "--tags", "--always")
-		cmd.Dir = sqPath
-		out, err := cmd.Output()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		version := fmt.Sprintf("%s-%s", bytes.TrimSpace(out), time.Now().Format(time.RFC3339))
-		fmt.Printf("Building slashquery: %s\n", version)
-		cmd = exec.Command("go", "build", "-ldflags", fmt.Sprintf("-s -w -X main.version=%s", version), "-o", "slashquery", "cmd/slashquery/main.go")
-		cmd.Dir = sqPath
-		if err := cmd.Run(); err != nil {
-			fmt.Println(err)
+		if err := Build(*f); err != nil {
+			fmt.Printf("Error while building: %ss\n", err)
 			os.Exit(1)
 		}
 		os.Exit(0)
@@ -127,4 +83,50 @@ func main() {
 			router),
 		)
 	}
+}
+
+// Build create slashquery from custom plugins
+func Build(config string) error {
+	// Getting slashquery
+	if err := exec.Command("go", "get", "github.com/slashquery/slashquery").Run(); err != nil {
+		return err
+	}
+	// Getting all dependecies
+	sqPath := path.Join(build.Default.GOPATH, "src", "github.com", "slashquery", "slashquery")
+	cmd := exec.Command("/bin/sh", "-c", "go get -d ./...")
+	cmd.Dir = sqPath
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	// golang.org/x/tools/cmd/goimports
+	if err := exec.Command("go", "get", "golang.org/x/tools/cmd/goimports").Run(); err != nil {
+		return err
+	}
+	fmt.Println("Creating routes")
+	cmd = exec.Command("go", "run", "genroutes.go", "-f", config)
+	cmd.Dir = sqPath
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	goimportsPath := path.Join(build.Default.GOPATH, "bin", "goimports")
+	cmd = exec.Command(goimportsPath, "-w", "routes.go")
+	cmd.Dir = sqPath
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	//get current version
+	cmd = exec.Command("git", "describe", "--tags", "--always")
+	cmd.Dir = sqPath
+	out, err := cmd.Output()
+	if err != nil {
+		return err
+	}
+	version := fmt.Sprintf("%s-%s", bytes.TrimSpace(out), time.Now().Format(time.RFC3339))
+	fmt.Printf("Building slashquery: %s\n", version)
+	cmd = exec.Command("go", "build", "-ldflags", fmt.Sprintf("-s -w -X main.version=%s", version), "-o", "slashquery", "cmd/slashquery/main.go")
+	cmd.Dir = sqPath
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
 }
