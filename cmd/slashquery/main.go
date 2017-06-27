@@ -72,6 +72,7 @@ func main() {
 
 	// listen on socket or address:port
 	if sq.Config["socket"] != "" {
+		os.Remove(sq.Config["socket"])
 		l, err := net.Listen("unix", sq.Config["socket"])
 		if err != nil {
 			log.Fatalln(err)
