@@ -22,7 +22,8 @@ var version string
 func main() {
 	var (
 		b = flag.Bool("b", false, fmt.Sprintf("Build slashquery"))
-		f = flag.String("f", "slashquery.yaml", "Configuration `slashquery.yaml`")
+		f = flag.String("f", "slashquery.yml", "Configuration `file`")
+		i = flag.Bool("i", false, fmt.Sprintf("Install slashquery in /usr/local/bin, need to use option -b"))
 		v = flag.Bool("v", false, fmt.Sprintf("Print version: %s", version))
 	)
 
@@ -39,8 +40,8 @@ func main() {
 	}
 
 	if *b {
-		if err := Build(*f); err != nil {
-			fmt.Printf("Error while building: %ss\n", err)
+		if err := Build(*f, *i); err != nil {
+			fmt.Printf("Error while building: %s\n", err)
 			os.Exit(1)
 		}
 		os.Exit(0)
@@ -87,14 +88,14 @@ func main() {
 }
 
 // Build create slashquery from custom plugins
-func Build(config string) error {
+func Build(config string, install bool) error {
 	// Getting slashquery
 	if err := exec.Command("go", "get", "github.com/slashquery/slashquery").Run(); err != nil {
 		return err
 	}
 	// Getting all dependecies
 	sqPath := path.Join(build.Default.GOPATH, "src", "github.com", "slashquery", "slashquery")
-	cmd := exec.Command("/bin/sh", "-c", "go get -d ./...")
+	cmd := exec.Command("go", "get", "-d", "./...")
 	cmd.Dir = sqPath
 	if err := cmd.Run(); err != nil {
 		return err
@@ -128,6 +129,14 @@ func Build(config string) error {
 	cmd.Dir = sqPath
 	if err := cmd.Run(); err != nil {
 		return err
+	}
+	if install {
+		fmt.Println("Installing into /usr/local/bin/slashquery")
+		cmd = exec.Command("install", "slashquery", "/usr/local/bin")
+		cmd.Dir = sqPath
+		if err := cmd.Run(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
