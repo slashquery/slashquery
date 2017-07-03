@@ -125,7 +125,7 @@ func Build(config string, install bool) error {
 	}
 	version := fmt.Sprintf("%s-%s", bytes.TrimSpace(out), time.Now().Format(time.RFC3339))
 	fmt.Printf("Building slashquery: %s\n", version)
-	cmd = exec.Command("go", "build", "-ldflags", fmt.Sprintf("-s -w -X main.version=%s", version), "-o", "slashquery", "cmd/slashquery/main.go")
+	cmd = exec.Command("go", "build", "-ldflags", "-s -w -X main.version="+version, "-o", "slashquery", "cmd/slashquery/main.go")
 	cmd.Dir = sqPath
 	if err := cmd.Run(); err != nil {
 		return err
