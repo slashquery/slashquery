@@ -6,4 +6,4 @@ config:
 
 routes:
   ~: # api.slashquery.com/ -> http://httpbin.org/*
-  url: https://slashquery.com
+    url: https://slashquery.com
