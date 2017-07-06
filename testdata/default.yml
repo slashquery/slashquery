@@ -8,3 +8,8 @@ config:
 routes:
   ~:
     url: https://slashquery.com
+    plugins:
+      - requestid
+
+plugins:
+  requestid: ["github.com/slashquery-plugins/requestid", "requestid.RequestID"]
