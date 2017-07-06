@@ -1,9 +1,10 @@
 # slashquery configuration file
 ---
 config:
+  debug: yes
   resolver: 8.8.8.8
   socket: /tmp/slashquery.sock
 
 routes:
-  ~: # api.slashquery.com/ -> http://httpbin.org/*
+  ~:
     url: https://slashquery.com
