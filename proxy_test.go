@@ -46,7 +46,7 @@ func TestProxy(t *testing.T) {
 	}
 	testUpstream, ok := sq.Upstreams[u.Host]
 	if !ok {
-		t.Errorf("Expecting upstream: %s", testUpstream)
+		t.Errorf("Expecting upstream: %v", testUpstream)
 	}
 	testServers, ok := sq.Servers[u.Host]
 	if !ok {
@@ -106,7 +106,7 @@ func TestProxyQuery(t *testing.T) {
 	expect(t, fmt.Sprintf("http://%s", u.Host), ts.URL)
 	testUpstream, ok := sq.Upstreams[u.Host]
 	if !ok {
-		t.Errorf("Expecting upstream: %s", testUpstream)
+		t.Errorf("Expecting upstream: %v", testUpstream)
 	}
 	testServers, ok := sq.Servers[u.Host]
 	if !ok {
