@@ -21,6 +21,8 @@ func New(file string) (*Slashquery, error) {
 
 	// to store upstream IP's
 	s.Servers = make(map[string]*Servers)
+
+	// Upstreams
 	if s.Upstreams == nil {
 		s.Upstreams = make(map[string]*Upstream)
 	}

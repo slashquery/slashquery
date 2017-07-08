@@ -35,7 +35,7 @@ func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 	}
 
 	if sq.Debug() {
-		log.Printf("Endpoints: %s\n", endpoints)
+		log.Printf("Upstream: %q, endpoints: %s\n", name, endpoints)
 	}
 
 	// loop until can connect to one endpoint
@@ -49,6 +49,10 @@ func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 		rand.Seed(time.Now().UnixNano())
 		i := rand.Intn(len(endpoints))
 		endpoint := endpoints[i]
+
+		if sq.Debug() {
+			log.Printf("Upstream: %q, using endpoint: %s\n", name, endpoint)
+		}
 
 		// Try to connect
 		conn, err := net.DialTimeout(network,
