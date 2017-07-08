@@ -19,7 +19,7 @@ func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 	}
 
 	if sq.Debug() {
-		log.Printf("Upstreams: %s\n", upstreams)
+		log.Printf("Upstreams: %s, timeout: %v\n", upstreams, timeout)
 	}
 
 	// endpoints contain the IP's from the servers
