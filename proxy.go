@@ -20,7 +20,7 @@ func (sq *Slashquery) Proxy(r string) *httputil.ReverseProxy {
 				// path with out *
 				p := strings.TrimSuffix(route.Path, "*")
 				s := strings.TrimPrefix(req.URL.Path, p)
-				req.URL.Path = s + p
+				req.URL.Path = p + s
 			} else {
 				req.URL.Path = route.Path
 			}
