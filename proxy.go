@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
+	"strings"
 	"time"
 )
 
@@ -15,9 +16,16 @@ func (sq *Slashquery) Proxy(r string) *httputil.ReverseProxy {
 	route := sq.Routes[r]
 	proxy := &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
+			if strings.HasSuffix(route.Path, "*") {
+				// path with out *
+				p := strings.TrimSuffix(route.Path, "*")
+				s := strings.TrimPrefix(req.URL.Path, p)
+				req.URL.Path = s + p
+			} else {
+				req.URL.Path = route.Path
+			}
 			req.Host = route.Host
 			req.URL.Host = route.Host
-			req.URL.Path = route.Path
 			req.URL.Scheme = route.Scheme
 			if route.rawQuery == "" || req.URL.RawQuery == "" {
 				req.URL.RawQuery = route.rawQuery + req.URL.RawQuery
