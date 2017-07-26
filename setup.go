@@ -3,6 +3,7 @@ package slashquery
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // Setup configures the upstream
@@ -18,10 +19,11 @@ func (sq *Slashquery) Setup() error {
 			route.Path = u.Path
 			route.rawQuery = u.RawQuery
 			if route.Upstream == "" {
-				route.Upstream = u.Host
-				if _, ok := sq.Upstreams[u.Host]; !ok {
-					sq.Upstreams[u.Host] = &Upstream{
-						Servers: []string{u.Host},
+				h := strings.Split(u.Host, ":")[0]
+				route.Upstream = h
+				if _, ok := sq.Upstreams[h]; !ok {
+					sq.Upstreams[h] = &Upstream{
+						Servers: []string{h},
 					}
 				}
 			}
