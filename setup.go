@@ -19,6 +19,7 @@ func (sq *Slashquery) Setup() error {
 			route.Path = u.Path
 			route.rawQuery = u.RawQuery
 			if route.Upstream == "" {
+				// set only host without port
 				h := strings.Split(u.Host, ":")[0]
 				route.Upstream = h
 				if _, ok := sq.Upstreams[h]; !ok {
