@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/nbari/violetear"
@@ -44,11 +45,12 @@ func TestProxy(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	testUpstream, ok := sq.Upstreams[u.Host]
+	h := strings.Split(u.Host, ":")[0]
+	testUpstream, ok := sq.Upstreams[h]
 	if !ok {
 		t.Errorf("Expecting upstream: %v", testUpstream)
 	}
-	testServers, ok := sq.Servers[u.Host]
+	testServers, ok := sq.Servers[h]
 	if !ok {
 		t.Errorf("Expecting servers: %s", testServers)
 	}
@@ -104,11 +106,12 @@ func TestProxyQuery(t *testing.T) {
 		t.Error(err)
 	}
 	expect(t, fmt.Sprintf("http://%s", u.Host), ts.URL)
-	testUpstream, ok := sq.Upstreams[u.Host]
+	h := strings.Split(u.Host, ":")[0]
+	testUpstream, ok := sq.Upstreams[h]
 	if !ok {
 		t.Errorf("Expecting upstream: %v", testUpstream)
 	}
-	testServers, ok := sq.Servers[u.Host]
+	testServers, ok := sq.Servers[h]
 	if !ok {
 		t.Errorf("Expecting servers: %s", testServers)
 	}
