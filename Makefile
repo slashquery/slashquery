@@ -16,13 +16,14 @@ generate:
 	${GOPATH}/bin/goimports -w routes.go
 
 get:
-	${GO} get
+	${GO} get -u
+	${GO} get -u github.com/go-yaml/yaml;
+	${GO} get -u github.com/miekg/dns;
+	${GO} get -u github.com/nbari/violetear;
+	${GO} get -u github.com/slashquery/resolver;
+	${GO} get -u golang.org/x/tools/cmd/goimports;
 
 build: get generate
-	${GO} get -u golang.org/x/tools/cmd/goimports
-	${GO} get -u github.com/go-yaml/yaml;
-	${GO} get -u github.com/nbari/violetear;
-	${GO} get -u github.com/miekg/dns;
 	${GO} build -ldflags "-s -w -X main.version=${VERSION}" -o slashquery cmd/slashquery/main.go;
 
 clean:
