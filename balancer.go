@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"net"
+	"sync/atomic"
 	"time"
 )
 
@@ -45,13 +46,20 @@ func (sq *Slashquery) Balancer(name, network, port string) (net.Conn, error) {
 			break
 		}
 
-		// Select a random endpoint
-		rand.Seed(time.Now().UnixNano())
-		i := rand.Intn(len(endpoints))
+		// find endpoint based on the load balance type
+		var i int
+		switch sq.Upstreams[name].LBtype {
+		case "random":
+			// Select a random endpoint
+			rand.Seed(time.Now().UnixNano())
+			i = int(rand.Intn(len(endpoints)))
+		default:
+			i = int(atomic.AddUint32(&sq.Upstreams[name].RRindex, 1) % uint32(len(endpoints)))
+		}
 		endpoint := endpoints[i]
 
 		if sq.Debug() {
-			log.Printf("Upstream: %q, using endpoint: %s\n", name, endpoint)
+			log.Printf("Upstream: %q, using endpoint: %s LB type: %s \n", name, endpoint, sq.Upstreams[name].LBtype)
 		}
 
 		// Try to connect

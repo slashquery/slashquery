@@ -55,8 +55,17 @@ type Route struct {
 
 // Upstream structure
 type Upstream struct {
+	// Servers list of IP's
 	Servers []string
+
+	// Timeout before trying another server
 	Timeout int
+
+	// LBtype round-robin, random
+	LBtype string
+
+	// RRindex last used server
+	RRindex uint32
 }
 
 // Servers keep IP's from upstreams (needs a resolver)
