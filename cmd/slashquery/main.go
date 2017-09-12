@@ -74,8 +74,6 @@ func main() {
 	// go:generate go run genroutes.go
 	sq.AddRoutes(router)
 
-	fmt.Printf("hostwhitelist: %+v\n", sq.Config["hostwhitelist"])
-
 	// listen on socket or address:port
 	if sq.Config["socket"] != "" {
 		os.Remove(sq.Config["socket"])
