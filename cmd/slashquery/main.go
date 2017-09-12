@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"flag"
 	"fmt"
 	"go/build"
@@ -11,10 +12,12 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/nbari/violetear"
 	"github.com/slashquery/slashquery"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 var version string
@@ -71,6 +74,8 @@ func main() {
 	// go:generate go run genroutes.go
 	sq.AddRoutes(router)
 
+	fmt.Printf("hostwhitelist: %+v\n", sq.Config["hostwhitelist"])
+
 	// listen on socket or address:port
 	if sq.Config["socket"] != "" {
 		os.Remove(sq.Config["socket"])
@@ -79,12 +84,28 @@ func main() {
 			log.Fatalln(err)
 		}
 		log.Fatalln(http.Serve(l, router))
-	} else {
-		log.Fatalln(http.ListenAndServe(
-			fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
-			router),
-		)
 	}
+	if sq.Config["hostwhitelist"] != "" {
+		domains := strings.Fields(sq.Config["hostwhitelist"])
+		cache := "/tmp/certs"
+		if val, ok := sq.Config["certcache"]; ok {
+			cache = val
+		}
+		m := autocert.Manager{
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist(domains...),
+			Cache:      autocert.DirCache(cache)}
+		s := &http.Server{
+			Addr:      ":https",
+			Handler:   router,
+			TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
+		}
+		log.Fatalln(s.ListenAndServeTLS("", ""))
+	}
+	log.Fatalln(http.ListenAndServe(
+		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
+		router),
+	)
 }
 
 // Build create slashquery from custom plugins

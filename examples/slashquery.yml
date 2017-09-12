@@ -7,6 +7,8 @@ config:
   request-id: X-Request-Id
   resolver: 8.8.8.8
   socket: /tmp/slashquery.sock
+  hostwhitelist: slashquery.com api.slashquery.com test.slashquery.com
+  certcache: /tmp/certs
 
 routes:
   ~: # api.slashquery.com/ -> http://httpbin.org/*
