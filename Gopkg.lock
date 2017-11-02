@@ -11,13 +11,13 @@
   branch = "master"
   name = "github.com/miekg/dns"
   packages = [".","internal/socket"]
-  revision = "946bd9fbed05568b0f3cd188353d8aa28f38b688"
+  revision = "a5852667e3c36e2e0b0a69ab43869e00e95aacdf"
 
 [[projects]]
   name = "github.com/nbari/violetear"
   packages = ["."]
-  revision = "72cf83a095fe6dcd7bc4bc16d0aac49696b8c614"
-  version = "4.1.0"
+  revision = "f7bc38ce29e218ffc860294acabef409ace48ad3"
+  version = "4.1.3"
 
 [[projects]]
   branch = "master"
@@ -29,11 +29,11 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["acme","acme/autocert"]
-  revision = "9419663f5a44be8b34ca85f08abc5fe1be11f8a3"
+  revision = "bd6f299fb381e4c3393d1c4b1f0b94f5e77650c8"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8389429591ede747c4fefddc82d9b0882bff09dbfa992913bb2dbf1a525946a4"
+  inputs-digest = "88f59c77dedfd6e96449ccfb95a196f85ed66090a5e0dbf84dd3f983a6d23626"
   solver-name = "gps-cdcl"
   solver-version = 1
