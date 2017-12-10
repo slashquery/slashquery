@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 
@@ -38,13 +39,13 @@ func main() {
 	}
 
 	if _, err := os.Stat(*f); os.IsNotExist(err) {
-		fmt.Printf("Cannot read configuration file: %s, use -h for more info.\n", *f)
+		fmt.Fprintf(os.Stderr, "Cannot read configuration file: %s, use -h for more info.\n", *f)
 		os.Exit(1)
 	}
 
 	if *b {
 		if err := Build(*f, *i); err != nil {
-			fmt.Printf("Error while building: %s\n", err)
+			fmt.Fprintf(os.Stderr, "Error while building: %s\n", err)
 			os.Exit(1)
 		}
 		os.Exit(0)
@@ -74,6 +75,22 @@ func main() {
 	// go:generate go run genroutes.go
 	sq.AddRoutes(router)
 
+	readTimeout := 5
+	if i, err := strconv.Atoi(sq.Config["readtimeout"]); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	} else {
+		readTimeout = i
+	}
+
+	writeTimeout := 10
+	if i, err := strconv.Atoi(sq.Config["writetimeout"]); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	} else {
+		writeTimeout = i
+	}
+
 	// listen on socket or address:port
 	if sq.Config["socket"] != "" {
 		os.Remove(sq.Config["socket"])
@@ -82,6 +99,13 @@ func main() {
 			log.Fatalln(err)
 		}
 		log.Fatalln(http.Serve(l, router))
+	}
+	srv := &http.Server{
+		Addr:           fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
+		Handler:        router,
+		ReadTimeout:    time.Duration(readTimeout) * time.Second,
+		WriteTimeout:   time.Duration(writeTimeout) * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
 	if sq.Config["hostwhitelist"] != "" {
 		domains := strings.Fields(sq.Config["hostwhitelist"])
@@ -93,17 +117,11 @@ func main() {
 			Prompt:     autocert.AcceptTOS,
 			HostPolicy: autocert.HostWhitelist(domains...),
 			Cache:      autocert.DirCache(cache)}
-		s := &http.Server{
-			Addr:      ":https",
-			Handler:   router,
-			TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
-		}
-		log.Fatalln(s.ListenAndServeTLS("", ""))
+		srv.Addr = fmt.Sprintf("%s:443", sq.Config["host"])
+		srv.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
+		log.Fatalln(srv.ListenAndServeTLS("", ""))
 	}
-	log.Fatalln(http.ListenAndServe(
-		fmt.Sprintf("%s:%s", sq.Config["host"], sq.Config["port"]),
-		router),
-	)
+	log.Fatalln(srv.ListenAndServe())
 }
 
 // Build create slashquery from custom plugins

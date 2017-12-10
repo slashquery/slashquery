@@ -9,6 +9,8 @@ config:
   socket: /tmp/slashquery.sock
   hostwhitelist: slashquery.com api.slashquery.com test.slashquery.com
   certcache: /tmp/certs
+  readtimeout: 5
+  writetimeout: 10
 
 routes:
   ~: # api.slashquery.com/ -> http://httpbin.org/*
