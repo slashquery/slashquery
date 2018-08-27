@@ -3,43 +3,71 @@
 
 [[projects]]
   branch = "v2"
+  digest = "1:f0620375dd1f6251d9973b5f2596228cc8042e887cd7f827e4220bc1ce8c30e2"
   name = "github.com/go-yaml/yaml"
   packages = ["."]
-  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
+  pruneopts = ""
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
 
 [[projects]]
+  digest = "1:4c8d8358c45ba11ab7bb15df749d4df8664ff1582daead28bae58cf8cbe49890"
   name = "github.com/miekg/dns"
   packages = ["."]
-  revision = "9271f6595be6734763aaf4b7923f8f1b7a6cc559"
-  version = "v1.0.0"
+  pruneopts = ""
+  revision = "5a2b9fab83ff0f8bfc99684bd5f43a37abe560f1"
+  version = "v1.0.8"
 
 [[projects]]
+  digest = "1:78daeb96f6676dd71436de8b035e58995e6c0abf647178e39d20fdcf860b9c54"
   name = "github.com/nbari/violetear"
   packages = ["."]
+  pruneopts = ""
   revision = "f7bc38ce29e218ffc860294acabef409ace48ad3"
   version = "4.1.3"
 
 [[projects]]
   branch = "master"
+  digest = "1:f04becc5173a8acb8a691a58b4715ccfac157a1bbca80b73eaf7c2d326e5a8b6"
   name = "github.com/slashquery/resolver"
   packages = ["."]
+  pruneopts = ""
   revision = "0a02f52079f74b885f4c7391c21a1cc4a75826ae"
 
 [[projects]]
   branch = "master"
+  digest = "1:793a79198b755828dec284c6f1325e24e09186f1b7ba818b65c7c35104ed86eb"
   name = "golang.org/x/crypto"
-  packages = ["acme","acme/autocert","ed25519","ed25519/internal/edwards25519"]
-  revision = "94eea52f7b742c7cbe0b03b22f0c4c8631ece122"
+  packages = [
+    "acme",
+    "acme/autocert",
+    "ed25519",
+    "ed25519/internal/edwards25519",
+  ]
+  pruneopts = ""
+  revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
 
 [[projects]]
   branch = "master"
+  digest = "1:7dd0f1b8c8bd70dbae4d3ed3fbfaec224e2b27bcc0fc65882d6f1dba5b1f6e22"
   name = "golang.org/x/net"
-  packages = ["bpf","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "dc871a5d77e227f5bbf6545176ef3eeebf87e76e"
+  packages = [
+    "bpf",
+    "internal/iana",
+    "internal/socket",
+    "ipv4",
+    "ipv6",
+  ]
+  pruneopts = ""
+  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "88f59c77dedfd6e96449ccfb95a196f85ed66090a5e0dbf84dd3f983a6d23626"
+  input-imports = [
+    "github.com/go-yaml/yaml",
+    "github.com/nbari/violetear",
+    "github.com/slashquery/resolver",
+    "golang.org/x/crypto/acme/autocert",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
